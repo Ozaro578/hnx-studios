@@ -1,0 +1,11 @@
+{
+  "name": "hnx-studios",
+  "version": "0.1.0",
+  "private": true,
+  "description": "HNX Studios – Website, Apps und Trading-Simulator",
+  "type": "module",
+  "scripts": {
+    "test": "node --test trading/tests/*.test.js",
+    "serve": "npx --yes serve -l 8080 ."
+  }
+}

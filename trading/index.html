@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HNX Trading Simulator – Paper Trading mit Krypto</title>
+<meta name="description" content="Kostenloser Krypto-Trading-Simulator: Üben mit virtuellem Geld, echten Kursen, Gebühren- und Risikorechner.">
+<style>
+  :root{
+    --bg:#f6f7fb;--card:#fff;--text:#1d2233;--muted:#6b7280;--line:#e5e7eb;
+    --brand:#1a0f4e;--accent:#1d9e75;--danger:#d64545;--warn:#b45309;--warn-bg:#fff7ed;
+  }
+  *{box-sizing:border-box}
+  body{font-family:Arial,Helvetica,sans-serif;margin:0;background:var(--bg);color:var(--text);line-height:1.55}
+  header{background:var(--brand);color:#fff;padding:18px 20px}
+  header h1{margin:0;font-size:22px}
+  header p{margin:4px 0 0;opacity:.85;font-size:14px}
+  main{max-width:1000px;margin:0 auto;padding:16px 20px 60px}
+  .notice{background:var(--warn-bg);border:1px solid #fdba74;color:var(--warn);border-radius:8px;padding:10px 14px;font-size:14px;margin:14px 0}
+  nav.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0}
+  nav.tabs button{border:1px solid var(--line);background:var(--card);padding:8px 14px;border-radius:999px;cursor:pointer;font-size:14px;color:var(--text)}
+  nav.tabs button[aria-selected="true"]{background:var(--brand);color:#fff;border-color:var(--brand)}
+  section.tab[hidden]{display:none}
+  .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px}
+  .card h2,.card h3{margin:0 0 10px;font-size:16px;color:var(--brand)}
+  .kpi{font-size:22px;font-weight:bold}
+  .kpi small{font-size:13px;font-weight:normal;color:var(--muted)}
+  .pos{color:var(--accent)}.neg{color:var(--danger)}
+  .muted{color:var(--muted);font-size:13px}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
+  th{color:var(--muted);font-weight:normal;font-size:12px;text-transform:uppercase}
+  td.num,th.num{text-align:right}
+  .scroll{overflow-x:auto}
+  form .row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:10px}
+  label{display:flex;flex-direction:column;font-size:13px;color:var(--muted);gap:4px;min-width:140px;flex:1}
+  input,select{padding:8px 10px;border:1px solid var(--line);border-radius:6px;font-size:15px;width:100%}
+  button.primary{background:var(--accent);color:#fff;border:0;padding:10px 16px;border-radius:6px;font-size:15px;cursor:pointer}
+  button.danger{background:var(--danger)}
+  button.ghost{background:transparent;border:1px solid var(--line);color:var(--text);padding:6px 10px;border-radius:6px;cursor:pointer;font-size:13px}
+  .price-card{cursor:pointer}
+  .price-card.selected{outline:2px solid var(--accent)}
+  .preview{background:var(--bg);border-radius:6px;padding:10px;font-size:14px;margin-top:6px}
+  .stack{display:grid;gap:12px}
+  .learn h3{margin-top:22px}
+  .learn p,.learn li{font-size:15px}
+  .bar{height:10px;background:var(--line);border-radius:5px;overflow:hidden}
+  .bar span{display:block;height:100%;background:var(--accent)}
+  footer{max-width:1000px;margin:0 auto;padding:0 20px 30px;font-size:12px;color:var(--muted)}
+  @media (max-width:600px){ .kpi{font-size:18px} main{padding:12px} }
+</style>
+</head>
+<body>
+<header>
+  <h1>📈 HNX Trading Simulator</h1>
+  <p>Krypto-Trading lernen mit virtuellem Geld und echten Kursen – ohne einen Cent zu riskieren.</p>
+</header>
+
+<main>
+  <div class="notice">
+    <strong>Simulation.</strong> Hier wird kein echtes Geld bewegt. Das ist ein Lern-Werkzeug und keine Anlageberatung.
+    Kryptowährungen sind extrem schwankungsanfällig – investiere im echten Leben nur Geld, dessen Totalverlust du verkraften kannst.
+  </div>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" data-tab="dashboard">Dashboard</button>
+    <button role="tab" aria-selected="false" data-tab="trade">Handeln</button>
+    <button role="tab" aria-selected="false" data-tab="calc">Rechner</button>
+    <button role="tab" aria-selected="false" data-tab="learn">Lernen</button>
+  </nav>
+
+  <!-- ================= DASHBOARD ================= -->
+  <section class="tab" id="tab-dashboard">
+    <div class="grid" id="kpis"></div>
+
+    <div class="card" style="margin-top:12px">
+      <h2>Kurse <span class="muted" id="price-status">lade…</span></h2>
+      <div class="grid" id="prices"></div>
+    </div>
+
+    <div class="card" style="margin-top:12px">
+      <h2>Offene Positionen</h2>
+      <div class="scroll"><table id="positions"></table></div>
+    </div>
+
+    <div class="card" style="margin-top:12px">
+      <h2>Order-Historie</h2>
+      <div class="scroll"><table id="history"></table></div>
+      <p style="margin-top:10px"><button class="ghost" id="reset">Portfolio zurücksetzen</button></p>
+    </div>
+  </section>
+
+  <!-- ================= HANDELN ================= -->
+  <section class="tab" id="tab-trade" hidden>
+    <div class="stack">
+      <div class="card">
+        <h2>Kaufen</h2>
+        <form id="buy-form">
+          <div class="row">
+            <label>Coin <select name="symbol" id="buy-symbol"></select></label>
+            <label>Betrag in € <input name="amount" type="number" min="1" step="1" value="50" required></label>
+            <label>Gebührenmodell
+              <select name="fee" id="fee-select">
+                <option value="0.001">Börse (0,1 %)</option>
+                <option value="0.005">Broker (0,5 %)</option>
+                <option value="0.015">Neo-Broker-App (1,5 %)</option>
+              </select>
+            </label>
+            <button class="primary" type="submit">Kaufen</button>
+          </div>
+          <div class="preview" id="buy-preview"></div>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>Verkaufen</h2>
+        <form id="sell-form">
+          <div class="row">
+            <label>Position <select name="symbol" id="sell-symbol"></select></label>
+            <label>Anteil <select name="fraction">
+              <option value="0.25">25 %</option><option value="0.5">50 %</option><option value="1" selected>100 %</option>
+            </select></label>
+            <button class="primary danger" type="submit">Verkaufen</button>
+          </div>
+          <div class="preview" id="sell-preview"></div>
+        </form>
+      </div>
+      <p class="muted">Kaufe erst, wenn du im Lern-Bereich verstanden hast, was Spread, Gebühren und Volatilität bedeuten. Notiere dir vor jedem Trade: <em>Warum</em> kaufe ich, wo ist mein Ausstieg?</p>
+    </div>
+  </section>
+
+  <!-- ================= RECHNER ================= -->
+  <section class="tab" id="tab-calc" hidden>
+    <div class="stack">
+
+      <div class="card">
+        <h2>Positionsgröße (1-%-Regel)</h2>
+        <p class="muted">Profis riskieren pro Trade nur 1–2 % ihres Kapitals. Der Rechner sagt dir, wie viel du kaufen darfst, damit dein Stop-Loss dich höchstens so viel kostet.</p>
+        <form id="size-form">
+          <div class="row">
+            <label>Kapital € <input name="capital" type="number" value="500" min="1" step="1"></label>
+            <label>Risiko pro Trade % <input name="risk" type="number" value="1" min="0.1" max="100" step="0.1"></label>
+            <label>Einstiegskurs <input name="entry" type="number" value="100" min="0.0001" step="any"></label>
+            <label>Stop-Loss-Kurs <input name="stop" type="number" value="95" min="0.0001" step="any"></label>
+          </div>
+        </form>
+        <div class="preview" id="size-result"></div>
+      </div>
+
+      <div class="card">
+        <h2>Gebühren &amp; Break-even</h2>
+        <p class="muted">Gebühren fallen beim Kauf UND beim Verkauf an. Dazu kommt der Spread (Differenz zwischen Kauf- und Verkaufskurs). Wie viel muss der Kurs steigen, bis du bei null bist?</p>
+        <form id="fee-form">
+          <div class="row">
+            <label>Gebühr pro Order % <input name="fee" type="number" value="1.5" min="0" max="10" step="0.01"></label>
+            <label>Spread % <input name="spread" type="number" value="0.5" min="0" max="10" step="0.01"></label>
+            <label>Anzahl Trades pro Monat <input name="trades" type="number" value="10" min="0" step="1"></label>
+            <label>Ø Betrag pro Trade € <input name="amount" type="number" value="50" min="1" step="1"></label>
+          </div>
+        </form>
+        <div class="preview" id="fee-result"></div>
+      </div>
+
+      <div class="card">
+        <h2>Sparplan-Simulation (DCA)</h2>
+        <p class="muted">Cost-Averaging: Jeden Monat den gleichen Betrag kaufen, egal wie der Kurs steht. Simulation mit echten Monats-Schlusskursen der letzten 12 Monate (Quelle: CoinGecko).</p>
+        <form id="dca-form">
+          <div class="row">
+            <label>Coin <select name="symbol" id="dca-symbol"></select></label>
+            <label>Sparrate pro Monat € <input name="amount" type="number" value="25" min="1" step="1"></label>
+            <label>Gebühr % <input name="fee" type="number" value="1" min="0" max="10" step="0.01"></label>
+            <button class="primary" type="submit">Simulieren</button>
+          </div>
+        </form>
+        <div class="preview" id="dca-result">Noch nicht simuliert.</div>
+      </div>
+
+      <div class="card">
+        <h2>Verluste aufholen</h2>
+        <p class="muted">Warum Risikomanagement alles ist: Ein Verlust braucht überproportional viel Gewinn, um wieder ausgeglichen zu werden.</p>
+        <div class="scroll"><table id="recovery"></table></div>
+      </div>
+
+      <div class="card">
+        <h2>Hebel (Leverage) – die Falle</h2>
+        <p class="muted">Mit Hebel handelst du mit geliehenem Geld. Fällt der Kurs um 100 % / Hebel, ist dein Einsatz komplett weg (Liquidation). Bei Krypto sind 10 % Tagesbewegung normal.</p>
+        <form id="lev-form"><div class="row">
+          <label>Hebel <input name="leverage" type="number" value="10" min="1" max="125" step="1"></label>
+          <label>Einstiegskurs <input name="entry" type="number" value="60000" min="0.0001" step="any"></label>
+        </div></form>
+        <div class="preview" id="lev-result"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= LERNEN ================= -->
+  <section class="tab learn" id="tab-learn" hidden>
+    <div class="card">
+      <h2>Trading verstehen – in 10 Minuten</h2>
+
+      <h3>1. Investieren vs. Trading</h3>
+      <p><strong>Investieren</strong> heißt: kaufen und lange halten (Jahre), weil du glaubst, dass etwas langfristig mehr wert wird. <strong>Trading</strong> heißt: kurzfristige Kursschwankungen ausnutzen (Minuten bis Wochen). Trading ist ein Nullsummenspiel <em>minus Gebühren</em> – dein Gewinn ist der Verlust eines anderen, und die Börse verdient immer mit. Studien zeigen: Die große Mehrheit der Daytrader verliert langfristig Geld.</p>
+
+      <h3>2. Wie ein Krypto-Kauf abläuft</h3>
+      <ul>
+        <li>Du meldest dich bei einer <strong>Börse</strong> (z. B. Kraken, Coinbase, Bitpanda, Bison) oder einem Broker an und verifizierst dich (Ausweis, Pflicht in der EU).</li>
+        <li>Du zahlst Euro ein (SEPA ist meist kostenlos, Kreditkarte oft 2–4 % Gebühr!).</li>
+        <li>Du gibst eine <strong>Order</strong> auf: <em>Market</em> (sofort zum aktuellen Kurs) oder <em>Limit</em> (nur zu deinem Wunschkurs).</li>
+        <li>Die Börse behält eine <strong>Gebühr</strong> (0,1 % bis 1,5 %) und beim Market-Kauf zahlst du zusätzlich den <strong>Spread</strong>.</li>
+        <li>Die Coins liegen dann in deinem Börsen-Konto (Custodial) – oder du überträgst sie auf eine eigene <strong>Wallet</strong> (Self-Custody: du hast die Schlüssel, aber auch die volle Verantwortung).</li>
+      </ul>
+
+      <h3>3. Was den Kurs bewegt</h3>
+      <p>Angebot und Nachfrage – sonst nichts. Bitcoin hat keinen inneren Wert wie ein Unternehmen mit Gewinnen. Kurse reagieren auf Nachrichten, Zinsentscheidungen, Regulierung, große Käufer/Verkäufer („Whales“) und Stimmung in sozialen Medien. Darum ist Krypto <strong>volatil</strong>: ±10 % an einem Tag sind normal, −80 % in einem Bärenmarkt kamen mehrfach vor.</p>
+
+      <h3>4. Die 5 Regeln für kleines Geld</h3>
+      <ol>
+        <li><strong>Nur Geld, das du verlieren kannst.</strong> Erst Notgroschen (2–3 Monatsgehälter auf dem Tagesgeld), dann Schulden tilgen, dann investieren.</li>
+        <li><strong>Kein Hebel, keine Futures, keine „Signal-Gruppen“.</strong> Das ist der schnellste Weg, ein kleines Konto auf null zu bringen.</li>
+        <li><strong>Gebühren sind bei kleinen Beträgen dein größter Feind.</strong> Bei 1,5 % pro Order brauchst du +3 % Kurs, nur um bei null zu sein. Nutze Börsen mit 0,1–0,3 % und handle selten.</li>
+        <li><strong>Sparplan statt Timing.</strong> Niemand trifft den perfekten Zeitpunkt. 25 € pro Monat automatisch kaufen nimmt die Emotion raus.</li>
+        <li><strong>Streuen.</strong> Ein breiter Welt-ETF-Sparplan (ab 1 € pro Monat bei vielen Brokern, ~0,2 % Kosten pro Jahr) ist für die Basis sinnvoller als 100 % Krypto. Krypto maximal 5–10 % vom Gesamtvermögen.</li>
+      </ol>
+
+      <h3>5. Risikomanagement in einem Satz</h3>
+      <p>Bevor du kaufst, weißt du, bei welchem Kurs du verkaufst – nach oben (Ziel) und nach unten (Stop-Loss) – und riskierst pro Trade nie mehr als 1–2 % deines Kapitals. Der Rechner-Tab macht genau das.</p>
+
+      <h3>6. Steuern in Deutschland (Kurzfassung, keine Steuerberatung)</h3>
+      <ul>
+        <li>Krypto zählt als <strong>privates Veräußerungsgeschäft</strong> (§ 23 EStG).</li>
+        <li><strong>Haltefrist über 1 Jahr → Gewinn steuerfrei.</strong></li>
+        <li>Unter 1 Jahr: Gewinne bis zur <strong>Freigrenze von 1.000 € pro Jahr</strong> steuerfrei; darüber wird der <em>gesamte</em> Gewinn mit deinem persönlichen Steuersatz versteuert.</li>
+        <li>Jeder Verkauf und Tausch (auch Coin gegen Coin) ist ein steuerliches Ereignis – führe Buch (Börsen bieten Exporte).</li>
+      </ul>
+
+      <h3>7. Betrug erkennen</h3>
+      <p>„Garantierte Rendite“, „Trading-Bot mit 5 % pro Tag“, DMs auf Instagram/Telegram, Promi-Werbung, Druck („nur heute“), oder Plattformen, bei denen die Auszahlung „erst nach einer Steuerzahlung“ möglich ist – alles Betrug. Seriöse Anbieter in Deutschland haben eine <strong>BaFin-Lizenz</strong> (prüfbar in der BaFin-Datenbank).</p>
+
+      <h3>8. Dein Übungsplan mit diesem Simulator</h3>
+      <ol>
+        <li>Woche 1–2: Nur beobachten. Kurse täglich anschauen, Bewegungen notieren.</li>
+        <li>Woche 3–4: Mit 1.000 € virtuell handeln, immer mit Stop-Loss-Plan aus dem Rechner. Jeden Trade begründen.</li>
+        <li>Nach einem Monat: Historie auswerten. Wie viel hast du nach Gebühren gemacht? Hättest du mit einem Sparplan besser abgeschnitten (DCA-Rechner)?</li>
+        <li>Erst dann echtes Geld – und nur so viel, dass ein Totalverlust dich nicht trifft.</li>
+      </ol>
+    </div>
+  </section>
+</main>
+<footer>
+  HNX Studios · Kursdaten: CoinGecko (öffentliche API, ohne Gewähr) · Portfolio wird nur lokal in deinem Browser gespeichert · Keine Anlage- oder Steuerberatung.
+</footer>
+
+<script type="module" src="./app.js"></script>
+</body>
+</html>
