@@ -1,5 +1,5 @@
 /**
- * HNX Trading Engine – reine, framework-freie Handelslogik für den Paper-Trading-Simulator.
+ * Trading Engine – reine, framework-freie Handelslogik für den Paper-Trading-Simulator.
  *
  * Alle Funktionen sind "pure": Sie verändern ihre Eingaben nicht, sondern liefern neue Objekte.
  * Beträge sind in der Quote-Währung (z. B. EUR), Mengen in der Basis-Währung (z. B. BTC).

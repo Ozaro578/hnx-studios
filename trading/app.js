@@ -13,7 +13,7 @@ const COINS = [
 ];
 // Fallback, falls die API nicht erreichbar ist (Rate-Limit, offline, Adblocker)
 const DEMO_PRICES = { BTC: 60000, ETH: 2500, SOL: 140, XRP: 0.55, ADA: 0.4 };
-const STORAGE_KEY = "hnx-trading-portfolio-v1";
+const STORAGE_KEY = "trading-portfolio-v1";
 const START_CASH = 1000;
 const REFRESH_MS = 60_000;
 

@@ -2,7 +2,7 @@
   "name": "hnx-studios",
   "version": "0.1.0",
   "private": true,
-  "description": "HNX Studios – Website, Apps und Trading-Simulator",
+  "description": "Trading-Simulator (Paper Trading) – privates Lernprojekt",
   "type": "module",
   "scripts": {
     "test": "node --test trading/tests/*.test.js",

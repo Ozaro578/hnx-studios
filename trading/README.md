@@ -1,4 +1,4 @@
-# HNX Trading Simulator
+# Trading Simulator
 
 Paper-Trading-App zum Lernen von Krypto-Trading – ohne echtes Geld.
 
