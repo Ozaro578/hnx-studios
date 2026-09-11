@@ -18,6 +18,7 @@
 
   /* Einsatzgebiet-Karte */
   var m = $('#map-public');
+  if (m && !window.L) m.innerHTML = '<div class="empty" style="display:grid;place-items:center;height:100%;color:var(--muted);font-size:.9rem;padding:1rem;text-align:center">Kartenansicht: Heilbronn und Umkreis von ' + co.serviceRadiusKm + ' km (wird auf der Live-Seite geladen)</div>';
   if (m && window.L) {
     var map = L.map(m, { scrollWheelZoom: false }).setView([co.lat, co.lng], 8);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' }).addTo(map);
