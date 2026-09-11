@@ -1,0 +1,44 @@
+name: Netlify custom domain
+
+on:
+  workflow_dispatch:
+    inputs:
+      token:
+        description: "Netlify personal access token"
+        required: true
+        type: string
+      site_id:
+        description: "Netlify site id"
+        required: true
+        default: "71608847-88a5-4a03-a168-dc8a4886fcfa"
+        type: string
+      domain:
+        description: "Custom domain"
+        required: true
+        default: "torpro-zugangstechnik.de"
+        type: string
+
+jobs:
+  domain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Attach domain and provision SSL
+        env:
+          TOKEN: ${{ inputs.token }}
+          SITE: ${{ inputs.site_id }}
+          DOMAIN: ${{ inputs.domain }}
+        run: |
+          echo "::add-mask::$TOKEN"
+          API="https://api.netlify.com/api/v1"
+          H=(-H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json")
+          echo "== Domain setzen"
+          body=$(jq -nc --arg d "$DOMAIN" '{custom_domain:$d, domain_aliases:["www."+$d]}')
+          curl -sS -w '\nHTTP %{http_code}\n' -X PATCH "${H[@]}" -d "$body" "$API/sites/$SITE" | jq -c 'if type=="object" then {name, custom_domain, domain_aliases, ssl, ssl_url, url} else . end' 2>/dev/null || true
+          echo "== SSL anfordern"
+          curl -sS -w '\nHTTP %{http_code}\n' -X POST "${H[@]}" "$API/sites/$SITE/ssl" || true
+          sleep 10
+          echo "== SSL-Status"
+          curl -sS "${H[@]}" "$API/sites/$SITE/ssl" | jq -c '{state, domains, created_at, expires_at}' 2>/dev/null || true
+          echo "== Site-Status"
+          curl -sS "${H[@]}" "$API/sites/$SITE" | jq -c '{name, custom_domain, domain_aliases, ssl, ssl_url, url, force_ssl}'
