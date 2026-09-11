@@ -27,57 +27,61 @@
   <p class="lead">Tortyp, Maße, Farbe, Antrieb und Extras auswählen. Sie sehen sofort einen Richtpreis und erhalten von uns ein verbindliches Festpreis-Angebot.</p>
 </div></section><section class="section alt" id="konfigurator"><div class="container"><div class="konfigurator" style="margin-top:2.5rem" id="konf">
       <div class="card">
+        <div class="konf-progress"><span id="konf-progress"></span></div>
         <div class="konf-steps" id="konf-steps"></div>
 
-        <!-- Schritt 1: Tortyp -->
+        <!-- 1 Tortyp -->
         <div class="konf-panel" data-step="0">
           <h3>1. Welches Tor soll es sein?</h3>
           <div class="options" data-group="type"></div>
+          <div class="field" style="margin-top:1.2rem"><label for="k-facade">Fassade in der Vorschau</label><select id="k-facade"><option value="putz">Putz, beige</option><option value="weiss">Putz, weiß</option><option value="grau">Putz, grau</option><option value="klinker">Klinker</option></select><div class="hint">Nur für die Vorschau – so sehen Sie, wie das Tor zu Ihrem Haus passt.</div></div>
         </div>
 
-        <!-- Schritt 2: Maße -->
+        <!-- 2 Maße -->
         <div class="konf-panel" data-step="1">
           <h3>2. Maße der Toröffnung</h3>
           <div class="field">
             <label for="k-width">Breite (lichte Öffnung)</label>
             <div class="range-row"><input type="range" id="k-width" min="2000" max="8000" step="50" value="2500"><input type="number" id="k-width-n" min="2000" max="8000" step="10" value="2500"></div>
-            <div class="hint">in Millimetern · Alu-Door Premium+ Tore sind bis 8.000 mm Breite möglich</div>
+            <div class="hint">in Millimetern · Standardbreiten 2.375 / 2.500 / 2.750 / 3.000 mm · Premium+ bis 8.000 mm</div>
           </div>
           <div class="field">
             <label for="k-height">Höhe (lichte Öffnung)</label>
             <div class="range-row"><input type="range" id="k-height" min="1800" max="3500" step="50" value="2125"><input type="number" id="k-height-n" min="1800" max="3500" step="10" value="2125"></div>
-            <div class="hint">in Millimetern · Standardhöhen: 2.000 / 2.125 / 2.250 / 2.500 mm</div>
+            <div class="hint">in Millimetern · Standardhöhen 2.000 / 2.125 / 2.250 / 2.500 mm</div>
           </div>
           <div class="row">
             <div class="field"><label for="k-sturz">Sturzhöhe (Platz über der Öffnung)</label><select id="k-sturz"><option value="unknown">Weiß ich nicht – bitte Aufmaß</option><option value="lt100">unter 100 mm</option><option value="100-200">100 – 200 mm</option><option value="gt200">über 200 mm</option></select></div>
             <div class="field"><label for="k-einbau">Einbausituation</label><select id="k-einbau"><option value="neubau">Neubau / Rohbau</option><option value="austausch">Austausch eines alten Tores</option><option value="sanierung">Sanierung / Umbau</option></select></div>
+            <div class="field" id="k-opening-wrap" hidden><label for="k-opening">Öffnungsrichtung</label><select id="k-opening"><option value="links">nach links</option><option value="rechts">nach rechts</option></select></div>
           </div>
+          <div class="notice" style="margin-top:.5rem">Tipp: Messen Sie die lichte Öffnung (Mauer zu Mauer, Boden bis Sturzunterkante). Wir prüfen alle Maße beim kostenlosen Aufmaß.</div>
         </div>
 
-        <!-- Schritt 3: Design -->
+        <!-- 3 Design -->
         <div class="konf-panel" data-step="2">
           <h3>3. Design & Oberfläche</h3>
-          <label>Sickung / Torblatt</label>
-          <div class="options" data-group="sicke" style="margin-bottom:1.2rem"></div>
+          <div id="k-design-note"></div>
+          <div id="k-design-sicke"><label>Sickung / Torblatt</label><div class="options" data-group="sicke" style="margin-bottom:1.2rem"></div></div>
           <label>Oberfläche</label>
           <div class="options" data-group="surface" style="margin-bottom:1.2rem"></div>
           <label>Farbe</label>
           <div class="options" data-group="color"></div>
           <div class="field" id="k-color-special-wrap" style="display:none;margin-top:1rem"><label for="k-color-special">Gewünschte RAL-Nummer</label><input id="k-color-special" placeholder="z. B. RAL 7024 Graphitgrau"></div>
-          <div style="margin-top:1.2rem"><label>Dämmung</label><div class="options" data-group="insulation"></div></div>
+          <div id="k-design-insulation" style="margin-top:1.2rem"><label>Dämmung</label><div class="options" data-group="insulation"></div></div>
         </div>
 
-        <!-- Schritt 4: Antrieb -->
+        <!-- 4 Antrieb -->
         <div class="konf-panel" data-step="3">
           <h3>4. Antrieb & Bedienung</h3>
           <div class="options" data-group="drive" style="margin-bottom:1.2rem"></div>
-          <div class="row">
+          <div class="row" id="k-handsender-wrap">
             <div class="field"><label for="k-handsender">Handsender gesamt</label><select id="k-handsender"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option></select><div class="hint">1 Handsender ist beim Antrieb inklusive</div></div>
           </div>
-          <div class="options" data-group="driveExtras" data-multi></div>
+          <div id="k-drive-extras-wrap"><label>Zubehör</label><div class="options" data-group="driveExtras" data-multi></div></div>
         </div>
 
-        <!-- Schritt 5: Extras -->
+        <!-- 5 Extras -->
         <div class="konf-panel" data-step="4">
           <h3>5. Extras & Montage</h3>
           <div class="options" data-group="extras" data-multi style="margin-bottom:1.2rem"></div>
@@ -85,9 +89,18 @@
           <div class="field" style="margin-top:1.2rem"><label for="k-wunsch">Wunschtermin (optional)</label><input type="month" id="k-wunsch"></div>
         </div>
 
-        <!-- Schritt 6: Kontakt -->
+        <!-- 6 Zusammenfassung & Angebot -->
         <div class="konf-panel" data-step="5">
-          <h3>6. Angebot anfordern</h3>
+          <h3>6. Zusammenfassung & Angebot</h3>
+          <div class="konf-summary" id="konf-summary"></div>
+          <div class="konf-tools">
+            <button type="button" class="btn btn-ghost btn-sm" id="konf-share">🔗 Link kopieren</button>
+            <button type="button" class="btn btn-ghost btn-sm" id="konf-print">🖨 Drucken / PDF</button>
+            <a class="btn btn-ghost btn-sm" id="konf-mail" href="#" target="_blank" rel="noopener">✉️ Per E-Mail senden</a>
+            <a class="btn btn-ghost btn-sm" id="konf-wa" href="#" target="_blank" rel="noopener" hidden>💬 WhatsApp</a>
+            <button type="button" class="btn btn-ghost btn-sm" id="konf-reset">↺ Neu starten</button>
+          </div>
+          <h3 style="margin-top:1.6rem">Ihre Kontaktdaten</h3>
           <form id="konf-form" novalidate>
             <div class="row">
               <div class="field"><label for="c-name">Name *</label><input id="c-name" required autocomplete="name"></div>
@@ -100,13 +113,14 @@
               <div class="field"><label for="c-city">Ort *</label><input id="c-city" required autocomplete="address-level2"></div>
             </div>
             <div class="field"><label for="c-msg">Anmerkungen</label><textarea id="c-msg" placeholder="Besonderheiten, Fragen, Erreichbarkeit …"></textarea></div>
-            <input class="honeypot" tabindex="-1" autocomplete="off" id="c-hp" name="website">
-            <label class="checkbox"><input type="checkbox" id="c-privacy" required> <span>Ich habe die <a href="datenschutz.html" target="_blank">Datenschutzerklärung</a> gelesen und bin mit der Verarbeitung meiner Daten zur Angebotserstellung einverstanden. *</span></label>
-            <div id="konf-msg" style="margin-top:1rem"></div>
-            <div style="margin-top:1.2rem;display:flex;gap:.8rem;flex-wrap:wrap">
-              <button class="btn btn-primary" type="submit" id="konf-submit">Unverbindliches Angebot anfordern</button>
-              <a class="btn btn-ghost" id="konf-mail" href="#" target="_blank" rel="noopener">Konfiguration per E-Mail senden</a>
+            <div class="row" style="align-items:end">
+              <label class="checkbox"><input type="checkbox" id="c-callback"> <span>Ich wünsche einen Rückruf</span></label>
+              <div class="field" style="margin:0"><label for="c-callback-time">Am besten erreichbar</label><select id="c-callback-time" disabled><option value="">egal</option><option>vormittags (8–12 Uhr)</option><option>nachmittags (12–17 Uhr)</option><option>abends (17–19 Uhr)</option></select></div>
             </div>
+            <input class="honeypot" tabindex="-1" autocomplete="off" id="c-hp" name="website">
+            <label class="checkbox" style="margin-top:1rem"><input type="checkbox" id="c-privacy" required> <span>Ich habe die <a href="datenschutz.html" target="_blank">Datenschutzerklärung</a> gelesen und bin mit der Verarbeitung meiner Daten zur Angebotserstellung einverstanden. *</span></label>
+            <div id="konf-msg" style="margin-top:1rem"></div>
+            <button class="btn btn-primary" type="submit" id="konf-submit" style="margin-top:1.2rem">Unverbindliches Angebot anfordern</button>
           </form>
         </div>
 
@@ -120,10 +134,11 @@
         <div class="preview" id="konf-preview"></div>
         <h3 style="margin-bottom:.4rem">Ihre Konfiguration</h3>
         <table id="konf-table"></table>
-        <div class="total" id="konf-total">– €<small>Richtpreis inkl. 19 % MwSt., unverbindlich</small></div>
-        <p class="hint" style="margin-top:.8rem">Der Richtpreis basiert auf Standardwerten. Das verbindliche Angebot erstellen wir nach Rücksprache bzw. Aufmaß vor Ort – kostenlos im Raum Heilbronn.</p>
+        <div class="total" id="konf-total">– €<small>Preisspanne inkl. 19 % MwSt., unverbindlich</small></div>
+        <p class="hint" style="margin-top:.8rem">Die Preisspanne basiert auf Standardwerten. Das verbindliche Angebot erstellen wir nach Rücksprache bzw. Aufmaß vor Ort – kostenlos im Raum Heilbronn.</p>
       </aside>
-    </div></div></section><section class="section"><div class="container grid grid-3">
+    </div>
+    <div class="konf-bar" id="konf-bar"><span id="konf-bar-price">–</span><button type="button" class="btn btn-primary btn-sm" id="konf-bar-next">Weiter</button></div></div></section><section class="section"><div class="container grid grid-3">
   <div class="card"><div class="icon">📐</div><h3>Kostenloses Aufmaß</h3><p>Im Raum Heilbronn messen wir vor Ort kostenlos auf und prüfen Sturz, Seitenplatz und Einbausituation.</p></div>
   <div class="card orange"><div class="icon">💶</div><h3>Festpreis</h3><p>Unser Angebot ist verbindlich. Keine versteckten Kosten – Montage und Entsorgung sind ausgewiesen.</p></div>
   <div class="card"><div class="icon">🏭</div><h3>Made in Germany</h3><p>Ihr Tor wird bei M-M Alu-Door oder Frankentore in Baden-Württemberg maßgefertigt.</p></div>

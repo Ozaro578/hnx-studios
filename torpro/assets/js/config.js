@@ -13,6 +13,7 @@ window.TORPRO_CONFIG = {
     city: "Heilbronn",
     phone: "+49 7131 0000000",                         // TODO: echte Nummer eintragen
     phoneDisplay: "07131 / 000 00 00",                 // TODO
+    whatsapp: "",                                      // optional: z. B. "+4917112345678" – aktiviert den WhatsApp-Button im Konfigurator
     email: "info@torpro-zugangstechnik.de",            // TODO: echte Adresse eintragen
     vatId: "TODO: USt-IdNr.",
     openingHours: [
@@ -105,6 +106,8 @@ window.TORPRO_CONFIG = {
     schlupftuer: 890,
     nebentuer: 1290,
     lueftung: 79,
+    griff: 79,               // Außengriff mit Notentriegelung
+    sicherheit: 249,         // Sicherheitspaket: Aufschiebesicherung, Fingerklemmschutz, Federbruchsicherung
     demontage: 190
   }
 };
