@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-<header class="site"><div class="container"><a class="brand" href="index.html"><span data-logo="mark"></span></a><nav class="main"><ul><li><a href="index.html">Startseite</a></li><li><a href="index.html#kontakt">Kontakt</a></li></ul></nav></div></header>
+<div id="site-header"></div>
 <main class="container legal">
   <h1>Impressum</h1>
   <p><strong>Angaben gemäß § 5 DDG</strong></p>
@@ -34,7 +34,7 @@
   <h2>Markenhinweis</h2>
   <p>Alu-Door, Frankentore, SOMMER, SOMloq2 und weitere genannte Marken sind Eigentum der jeweiligen Inhaber und werden nur zur Beschreibung der eingesetzten Produkte genannt.</p>
 </main>
-<footer class="site"><div class="container footer-bottom" style="display:flex;grid-template-columns:none;border:0;margin:0"><span>© <span id="year"></span> TorPro Zugangstechnik</span><span><a href="impressum.html">Impressum</a> · <a href="datenschutz.html">Datenschutz</a> · <a href="index.html">Startseite</a></span></div></footer>
-<script src="assets/js/config.js"></script><script src="assets/js/logo.js"></script><script src="assets/js/store.js"></script><script src="assets/js/main.js"></script>
+<div id="site-footer"></div>
+<script src="assets/js/config.js"></script><script src="assets/js/layout.js"></script><script src="assets/js/logo.js"></script><script src="assets/js/store.js"></script><script src="assets/js/main.js"></script>
 <script>(function(){var c=TORPRO_CONFIG.company;document.getElementById('imp-company').innerHTML=c.name+(c.legalForm&&!/TODO/.test(c.legalForm)?' '+c.legalForm:'')+'<br>'+c.street+'<br>'+c.zip+' '+c.city;if(!/TODO/.test(c.owner)){document.getElementById('imp-owner').textContent=c.owner;document.getElementById('imp-resp').textContent=c.owner+', '+c.street+', '+c.zip+' '+c.city;}if(!/TODO/.test(c.vatId))document.getElementById('imp-vat').textContent='Umsatzsteuer-Identifikationsnummer gemäß § 27 a UStG: '+c.vatId;if(!/TODO/.test(c.legalForm))document.getElementById('imp-legal').textContent=c.legalForm;})();</script>
 </body></html>

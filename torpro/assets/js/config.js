@@ -26,6 +26,17 @@ window.TORPRO_CONFIG = {
     serviceRadiusKm: 80
   },
 
+
+  /* Hero-Diashow auf der Startseite: Referenzfotos (alle im Format 16:9, 1920×1080 px).
+     Fehlende Dateien werden automatisch übersprungen. */
+  slides: [
+    { src: "assets/img/referenzen/ref-01.jpg", caption: "Sektionaltor RAL 7016 Anthrazit, flächenbündig · Heilbronn", alt: "Anthrazitfarbenes Sektionaltor, flächenbündig, in einer Garagenöffnung" },
+    { src: "assets/img/referenzen/ref-02.jpg", caption: "Sektionaltor RAL 9016 Verkehrsweiß, glatt · Heilbronn", alt: "Weißes Sektionaltor mit glatter Oberfläche" },
+    { src: "assets/img/referenzen/ref-03.jpg", caption: "Sektionaltor Anthrazit mit Notentriegelung · Raum Heilbronn", alt: "Anthrazitfarbenes Sektionaltor in einer Einzelgarage" },
+    { src: "assets/img/referenzen/ref-04.jpg", caption: "Sektionaltor Anthrazit, Austausch im Bestand · Raum Heilbronn", alt: "Neues anthrazitfarbenes Sektionaltor in einer sanierten Garage" },
+    { src: "assets/img/referenzen/ref-05.jpg", caption: "Frankentore Sektionaltor RAL 9007 Graualuminium · Raum Heilbronn", alt: "Silbergraues Sektionaltor in einer Fertiggarage" }
+  ],
+
   /* Optional: Endpoint, an den Konfigurator-Anfragen zusätzlich per POST
      (JSON) gesendet werden – z. B. Formspree, Make, Zapier oder ein eigenes Script.
      Leer lassen = nur Speicherung + E-Mail-Fallback. */
