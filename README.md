@@ -12,3 +12,9 @@ Mobile Apps & Games für Android.
 ## Kontakt
 
 📧 hn_player@hotmail.de
+
+## Weitere Projekte
+
+| Projekt | Beschreibung |
+|---------|-------------|
+| 🚪 [TorPro Zugangstechnik](torpro/) | Website mit Garagentor-Konfigurator und Adminbereich (Kalender, Karte, Aufträge) |

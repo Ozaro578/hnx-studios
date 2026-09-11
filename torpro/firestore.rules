@@ -1,0 +1,17 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Anfragen: jeder darf eine Anfrage anlegen (Website-Formulare),
+    // lesen/ändern/löschen nur angemeldete Mitarbeiter.
+    match /requests/{id} {
+      allow create: if request.resource.data.keys().hasAll(['kind', 'contact'])
+                    && request.resource.data.kind in ['konfigurator', 'kontakt'];
+      allow read, update, delete: if request.auth != null;
+    }
+    // Alle anderen Daten (Aufträge, Termine, Team, Kunden): nur angemeldete Mitarbeiter.
+    match /{collection}/{id} {
+      allow read, write: if request.auth != null
+                         && collection in ['orders', 'events', 'team', 'customers'];
+    }
+  }
+}
