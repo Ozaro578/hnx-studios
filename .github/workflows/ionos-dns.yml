@@ -1,0 +1,58 @@
+name: IONOS DNS setup
+
+on:
+  workflow_dispatch:
+    inputs:
+      api_key:
+        description: "IONOS API key (prefix.secret)"
+        required: true
+        type: string
+      domain:
+        description: "Domain"
+        required: true
+        default: "torpro-zugangstechnik.de"
+        type: string
+      target_ip:
+        description: "A record target"
+        required: true
+        default: "75.2.60.5"
+        type: string
+      target_cname:
+        description: "CNAME target for www"
+        required: true
+        default: "torpro-zugangstechnik.netlify.app"
+        type: string
+
+jobs:
+  dns:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Configure DNS at IONOS
+        env:
+          KEY: ${{ inputs.api_key }}
+          DOMAIN: ${{ inputs.domain }}
+          IP: ${{ inputs.target_ip }}
+          CNAME: ${{ inputs.target_cname }}
+        run: |
+          echo "::add-mask::$KEY"
+          API="https://api.hosting.ionos.com/dns/v1"
+          H=(-H "X-API-Key: $KEY" -H "Accept: application/json" -H "Content-Type: application/json")
+          echo "== Zonen abrufen"
+          zones=$(curl -sS "${H[@]}" "$API/zones")
+          echo "$zones" | jq -c '.[] | {name, id, type}'
+          ZID=$(echo "$zones" | jq -r --arg d "$DOMAIN" '.[] | select(.name==$d) | .id')
+          if [ -z "$ZID" ]; then echo "::error::Zone für $DOMAIN nicht gefunden"; exit 1; fi
+          echo "Zone-ID: $ZID"
+          echo "== Vorhandene Einträge"
+          zone=$(curl -sS "${H[@]}" "$API/zones/$ZID")
+          echo "$zone" | jq -c '.records[] | {name, type, content, id}'
+          echo "== Konfliktierende A/AAAA/CNAME-Einträge für @ und www löschen"
+          for rid in $(echo "$zone" | jq -r --arg d "$DOMAIN" '.records[] | select((.name==$d or .name=="www."+$d) and (.type=="A" or .type=="AAAA" or .type=="CNAME")) | .id'); do
+            code=$(curl -sS -o /dev/null -w '%{http_code}' -X DELETE "${H[@]}" "$API/zones/$ZID/records/$rid"); echo "delete $rid -> HTTP $code"
+          done
+          echo "== Neue Einträge anlegen"
+          body=$(jq -nc --arg d "$DOMAIN" --arg ip "$IP" --arg c "$CNAME" '[{name:$d,type:"A",content:$ip,ttl:3600,prio:0,disabled:false},{name:("www."+$d),type:"CNAME",content:$c,ttl:3600,prio:0,disabled:false}]')
+          resp=$(curl -sS -w '\nHTTP %{http_code}' -X POST "${H[@]}" -d "$body" "$API/zones/$ZID/records"); echo "$resp"
+          echo "== Ergebnis"
+          curl -sS "${H[@]}" "$API/zones/$ZID" | jq -c --arg d "$DOMAIN" '.records[] | select(.name==$d or .name=="www."+$d) | {name, type, content, ttl}'
