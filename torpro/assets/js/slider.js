@@ -27,6 +27,7 @@
   function restart() { clearInterval(timer); if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) timer = setInterval(function () { go(i + 1); }, 5500); }
   /* Nur Bilder verwenden, die tatsächlich existieren (Vorab-Check) */
   var pending = slides.length; if (!pending) return build();
+  var origBuild = build; build = function () { var own = loaded.filter(function (s) { return !s.stock; }); if (own.length >= 3) loaded = own; origBuild(); };
   slides.forEach(function (s, n) {
     var img = new Image();
     img.onload = function () { loaded[n] = s; if (--pending === 0) { loaded = loaded.filter(Boolean); build(); } };

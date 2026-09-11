@@ -39,7 +39,7 @@
   /* Galerie (Referenzen) + Lightbox */
   document.querySelectorAll('.gallery[id]').forEach(function (g) {
     var limit = +g.getAttribute('data-limit') || 999;
-    var items = (C.slides || []).slice(0, limit);
+    var items = (C.slides || []).filter(function (s) { return !s.stock; }).slice(0, limit);
     g.innerHTML = items.map(function (s) { return '<figure data-src="' + esc(s.src) + '"><img src="' + esc(s.src) + '" alt="' + esc(s.alt || '') + '" loading="lazy" onerror="this.closest(\'figure\').remove()"><figcaption>' + esc(s.caption || '') + '</figcaption></figure>'; }).join('');
     g.querySelectorAll('figure').forEach(function (f) { f.addEventListener('click', function () { openLightbox(f.getAttribute('data-src'), f.querySelector('img').alt); }); });
     /* Abschnitt ausblenden, solange keine Fotos vorhanden sind */

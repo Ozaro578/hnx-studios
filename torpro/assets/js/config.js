@@ -27,15 +27,21 @@ window.TORPRO_CONFIG = {
   },
 
 
-  /* Hero-Diashow auf der Startseite: Referenzfotos (alle im Format 16:9, 1920×1080 px).
+  /* Hero-Diashow auf der Startseite (Format 3:2, 1920×1280 px).
+     Sobald eigene Referenzfotos unter assets/img/referenzen/ liegen, hier eintragen.
      Fehlende Dateien werden automatisch übersprungen. */
   slides: [
-    { src: "assets/img/referenzen/ref-01.jpg", caption: "Sektionaltor RAL 7016 Anthrazit, flächenbündig · Heilbronn", alt: "Anthrazitfarbenes Sektionaltor, flächenbündig, in einer Garagenöffnung" },
-    { src: "assets/img/referenzen/ref-02.jpg", caption: "Sektionaltor RAL 9016 Verkehrsweiß, glatt · Heilbronn", alt: "Weißes Sektionaltor mit glatter Oberfläche" },
-    { src: "assets/img/referenzen/ref-03.jpg", caption: "Sektionaltor Anthrazit mit Notentriegelung · Raum Heilbronn", alt: "Anthrazitfarbenes Sektionaltor in einer Einzelgarage" },
-    { src: "assets/img/referenzen/ref-04.jpg", caption: "Sektionaltor Anthrazit, Austausch im Bestand · Raum Heilbronn", alt: "Neues anthrazitfarbenes Sektionaltor in einer sanierten Garage" },
-    { src: "assets/img/referenzen/ref-05.jpg", caption: "Frankentore Sektionaltor RAL 9007 Graualuminium · Raum Heilbronn", alt: "Silbergraues Sektionaltor in einer Fertiggarage" }
+    { src: "assets/img/referenzen/ref-01.jpg", caption: "Sektionaltor RAL 7016 Anthrazit, flächenbündig", alt: "Anthrazitfarbenes Sektionaltor, flächenbündig" },
+    { src: "assets/img/referenzen/ref-02.jpg", caption: "Sektionaltor RAL 9016 Verkehrsweiß, glatt", alt: "Weißes Sektionaltor mit glatter Oberfläche" },
+    { src: "assets/img/referenzen/ref-03.jpg", caption: "Sektionaltor Anthrazit mit Notentriegelung", alt: "Anthrazitfarbenes Sektionaltor in einer Einzelgarage" },
+    { src: "assets/img/referenzen/ref-04.jpg", caption: "Sektionaltor Anthrazit, Austausch im Bestand", alt: "Neues anthrazitfarbenes Sektionaltor in einer sanierten Garage" },
+    { src: "assets/img/referenzen/ref-05.jpg", caption: "Frankentore Sektionaltor RAL 9007 Graualuminium", alt: "Silbergraues Sektionaltor in einer Fertiggarage" },
+    { src: "assets/img/stock/garagentor-doppel.jpg", caption: "Sektionaltore für Einfamilienhäuser", alt: "Haus mit weißen Sektionaltoren", stock: true },
+    { src: "assets/img/stock/rolltor.jpg", caption: "Rolltore für Gewerbe und Tiefgaragen", alt: "Rolltor an einem Gewerbegebäude", stock: true },
+    { src: "assets/img/stock/montage.jpg", caption: "Montage durch eigene Monteure", alt: "Monteur mit Akkuschrauber bei der Montage", stock: true },
+    { src: "assets/img/stock/antrieb-smart.jpg", caption: "Antriebe mit Smart-Home-Anbindung", alt: "Hand bedient ein Smart-Home-Bedienfeld", stock: true }
   ],
+  /* Referenzen-Galerie: NUR eigene Fotos (werden automatisch aus slides ohne "stock" übernommen) */
 
   /* Optional: Endpoint, an den Konfigurator-Anfragen zusätzlich per POST
      (JSON) gesendet werden – z. B. Formspree, Make, Zapier oder ein eigenes Script.
