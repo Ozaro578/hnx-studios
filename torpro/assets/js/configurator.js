@@ -56,8 +56,10 @@
     ],
     drive: [
       { key: 'none', label: 'Ohne Antrieb', desc: 'Manuelle Bedienung', price: 0 },
-      { key: 'base', label: 'SOMMER base+', desc: 'Leiser Schienenantrieb, 1 Handsender, SOMloq2-Funk', price: P.drive.base },
-      { key: 'pro', label: 'SOMMER pro+', desc: 'Mehr Zugkraft, Notentriegelung, Akku-Option, App-fähig', price: P.drive.pro }
+      { key: 'aperto550', label: 'Aperto A 550 L', brand: 'Aperto by SOMMER', desc: '550 N · für Standardtore bis 3,5 m Breite / 100 kg · 1 Handsender', price: P.drive.aperto550, maxWidth: 3500 },
+      { key: 'aperto800', label: 'Aperto A 800 XL', brand: 'Aperto by SOMMER', desc: '800 N · Tore bis 6 m Breite / 140 kg · nur 1 W Standby · 1 Handsender', price: P.drive.aperto800, maxWidth: 6000 },
+      { key: 'base', label: 'SOMMER base+', brand: 'SOMMER', desc: 'Laufwagen-Antrieb, besonders leise · SOMloq2-Funk (128-Bit AES) · 1 Handsender', price: P.drive.base },
+      { key: 'pro', label: 'SOMMER pro+', brand: 'SOMMER', desc: 'Separate Wandsteuerung mit Taster · Akku- und App-Option · SOMloq2 · 1 Handsender', price: P.drive.pro }
     ],
     driveExtras: [
       { key: 'codetaster', label: 'Funk-Codetaster', desc: 'Öffnen per PIN ohne Sender', price: P.codetaster },
@@ -77,7 +79,7 @@
       { key: 'demontage', label: 'Demontage & Entsorgung Alttor', desc: 'Fachgerecht, inkl. Abtransport', price: P.demontage }
     ]
   };
-  var DEFAULT = { type: 'sektional', width: 2500, height: 2125, sturz: 'unknown', einbau: 'austausch', opening: 'links', sicke: 'gross', surface: 'woodgrain', color: 'ral7016', colorSpecial: '', insulation: '40', drive: 'base', handsender: 2, driveExtras: [], extras: [], montage: ['montage'], wunsch: '', facade: 'putz' };
+  var DEFAULT = { type: 'sektional', width: 2500, height: 2125, sturz: 'unknown', einbau: 'austausch', opening: 'links', sicke: 'gross', surface: 'woodgrain', color: 'ral7016', colorSpecial: '', insulation: '40', drive: 'aperto800', handsender: 2, driveExtras: [], extras: [], montage: ['montage'], wunsch: '', facade: 'putz' };
   var state = JSON.parse(JSON.stringify(DEFAULT));
   var step = 0, STEPS = ['Tortyp', 'Maße', 'Design', 'Antrieb', 'Extras', 'Angebot'];
 
@@ -96,10 +98,20 @@
   function available(group, o) {
     if (o.only && o.only.indexOf(state.type) < 0) return false;
     if (o.not && o.not.indexOf(state.type) >= 0) return false;
+    if (o.maxWidth && state.width > o.maxWidth) return false;
     return true;
+  }
+  /* SOMMER-Modellvariante nach Torfläche: 600 N bis ~8 m², 800 N bis ~12 m², darüber 1100 N */
+  function driveModel() {
+    var area = (state.width / 1000) * (state.height / 1000), k = state.drive;
+    if (k === 'base' || k === 'pro') { var v = area <= 8 ? ['S 9060', '600 N'] : area <= 12 ? ['S 9080', '800 N'] : ['S 9110', '1100 N']; return 'SOMMER ' + v[0] + ' ' + (k === 'base' ? 'base+' : 'pro+') + ' (' + v[1] + ')'; }
+    if (k === 'aperto550') return 'Aperto A 550 L (550 N)';
+    if (k === 'aperto800') return 'Aperto A 800 XL (800 N)';
+    return 'ohne Antrieb';
   }
   function sanitize() {
     ['extras', 'driveExtras'].forEach(function (g) { state[g] = state[g].filter(function (k) { var o = byKey(g, k); return o && available(g, o); }); });
+    var d = byKey('drive'); if (!d || !available('drive', d)) state.drive = 'aperto800';
     if (state.drive === 'none') state.driveExtras = state.driveExtras.filter(function (k) { return k === 'griff'; });
   }
 
@@ -112,6 +124,7 @@
       var price = typeof o.price === 'number' ? (o.price ? '+ ' + fmt(o.price) : 'inklusive') : o.price;
       return '<button type="button" class="opt' + (sel ? ' selected' : '') + '" data-key="' + o.key + '" aria-pressed="' + sel + '">' +
         (o.swatch ? '<span class="swatch" style="background:' + o.swatch + '"></span>' : '') +
+        (o.brand ? '<span class="brand-tag">' + o.brand + '</span>' : '') +
         '<b>' + o.label + '</b>' + (o.desc ? '<small>' + o.desc + '</small>' : '') + '<span class="price">' + price + '</span></button>';
     }).join('');
     $$('.opt', wrap).forEach(function (b) {
@@ -158,7 +171,7 @@
     if (P.surface[state.surface]) lines.push({ label: 'Oberfläche: ' + byKey('surface').label, val: P.surface[state.surface] });
     var col = RAL[state.color]; if (col.price) lines.push({ label: 'Farbe: ' + (state.color === 'special' && state.colorSpecial ? state.colorSpecial : col.label), val: col.price });
     if (state.drive !== 'none') {
-      lines.push({ label: 'Antrieb: ' + byKey('drive').label, val: P.drive[state.drive] });
+      lines.push({ label: 'Antrieb: ' + driveModel(), val: P.drive[state.drive] });
       var hs = Math.max(0, state.handsender - 1); if (hs) lines.push({ label: hs + ' zusätzl. Handsender', val: hs * P.handsender });
     }
     state.driveExtras.forEach(function (k) { lines.push({ label: byKey('driveExtras', k).label, val: P[k] }); });
@@ -252,7 +265,7 @@
     t.push('Oberfläche: ' + byKey('surface').label);
     t.push('Farbe: ' + RAL[state.color].label + (state.colorSpecial ? ' (' + state.colorSpecial + ')' : ''));
     if (SEKTIONAL.indexOf(state.type) >= 0) t.push('Dämmung: ' + byKey('insulation').label);
-    t.push('Antrieb: ' + byKey('drive').label + (state.drive !== 'none' ? ', ' + state.handsender + ' Handsender' : ''));
+    t.push('Antrieb: ' + driveModel() + (state.drive !== 'none' ? ', ' + state.handsender + ' Handsender' : ''));
     if (state.driveExtras.length) t.push('Zubehör: ' + state.driveExtras.map(function (k) { return byKey('driveExtras', k).label; }).join(', '));
     if (state.extras.length) t.push('Extras: ' + state.extras.map(function (k) { return byKey('extras', k).label; }).join(', '));
     t.push('Montage: ' + (state.montage.length ? state.montage.map(function (k) { return byKey('montage', k).label; }).join(', ') : 'keine'));
@@ -311,8 +324,8 @@
   if (restored && window.torproToast) setTimeout(function () { torproToast(restored === 'link' ? 'Konfiguration aus Link geladen' : 'Ihre letzte Konfiguration wurde wiederhergestellt'); }, 400);
   function bindRange(id, key) {
     var r = $('#' + id), n = $('#' + id + '-n');
-    r.addEventListener('input', function () { state[key] = +r.value; n.value = r.value; update(); });
-    n.addEventListener('change', function () { var v = Math.max(+n.min, Math.min(+n.max, +n.value || +n.min)); n.value = v; r.value = v; state[key] = v; update(); });
+    r.addEventListener('input', function () { state[key] = +r.value; n.value = r.value; sanitize(); renderGroup('drive'); update(); });
+    n.addEventListener('change', function () { var v = Math.max(+n.min, Math.min(+n.max, +n.value || +n.min)); n.value = v; r.value = v; state[key] = v; sanitize(); renderGroup('drive'); update(); });
   }
   bindRange('k-width', 'width'); bindRange('k-height', 'height');
   [['k-sturz', 'sturz'], ['k-einbau', 'einbau'], ['k-opening', 'opening'], ['k-facade', 'facade'], ['k-wunsch', 'wunsch']].forEach(function (p) { $('#' + p[0]).addEventListener('change', function (e) { state[p[1]] = e.target.value; update(); }); });

@@ -97,7 +97,9 @@ window.TORPRO_CONFIG = {
     colorStandard: 0,        // RAL 9016 Verkehrsweiß
     colorRal: 190,           // andere Vorzugsfarben
     colorSpecial: 390,       // Sonderfarbe nach RAL
-    drive:      { none: 0, base: 490, pro: 690 },
+    /* Antriebe: SOMMER (base+/pro+) und Aperto by SOMMER – Modellvariante wird
+       automatisch nach Torgröße gewählt (600/800/1100 N). Preise inkl. 1 Handsender. */
+    drive:      { none: 0, aperto550: 329, aperto800: 419, base: 490, pro: 690 },
     handsender: 45,          // je zusätzlicher Handsender (1 Stück beim Antrieb inklusive)
     codetaster: 129,
     smart: 149,

@@ -333,3 +333,9 @@ nav.main a.active::after { content: ""; position: absolute; left: 0; right: 0; b
 .konf-bar span { font-family: var(--font-head); font-weight: 800; font-size: 1.1rem; }
 @media (max-width: 1000px) { .konf-bar { display: flex; } .konfigurator { padding-bottom: 4rem; } .call-fab { bottom: 4.6rem; } .summary { position: static; } }
 @media (max-width: 640px) { .konf-summary dl { grid-template-columns: 1fr; gap: .1rem; } .konf-summary dt { margin-top: .5rem; } }
+
+.opt .brand-tag { display: inline-block; font-size: .68rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--orange); margin-bottom: .2rem; }
+.brands { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem; }
+.brand-box { flex: 1 1 240px; border: 1px solid var(--line); border-radius: 12px; padding: 1rem 1.2rem; background: #fff; }
+.brand-box b { font-family: var(--font-head); font-size: 1.05rem; display: block; margin-bottom: .3rem; }
+.brand-box ul { margin: .4rem 0 0; padding-left: 1.1rem; color: var(--muted); font-size: .9rem; line-height: 1.7; }
