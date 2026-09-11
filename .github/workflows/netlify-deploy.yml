@@ -1,0 +1,30 @@
+name: Deploy TorPro to Netlify
+
+on:
+  workflow_dispatch:
+    inputs:
+      proxy_path:
+        description: "Netlify MCP proxy path (temporary deploy credential)"
+        required: true
+        type: string
+
+concurrency:
+  group: netlify-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Deploy to Netlify
+        env:
+          NETLIFY_PROXY: ${{ inputs.proxy_path }}
+          NETLIFY_SITE_ID: 71608847-88a5-4a03-a168-dc8a4886fcfa
+        run: |
+          echo "::add-mask::$NETLIFY_PROXY"
+          npx -y @netlify/mcp@latest --site-id "$NETLIFY_SITE_ID" --proxy-path "$NETLIFY_PROXY"
