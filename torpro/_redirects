@@ -1,0 +1,2 @@
+# Netlify Redirects
+/admin   /admin/   301
