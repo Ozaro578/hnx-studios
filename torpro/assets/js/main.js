@@ -14,7 +14,7 @@
   var ms = $('#map-standort');
   if (ms && window.L) {
     var map = L.map(ms, { scrollWheelZoom: false, zoomControl: true, attributionControl: true }).setView([co.lat, co.lng], 13);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>', subdomains: 'abcd', maxZoom: 19 }).addTo(map);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>', maxZoom: 19, className: 'tiles-dark' }).addTo(map);
     L.circle([co.lat, co.lng], { radius: 2500, color: '#1f6fd6', fillColor: '#1f6fd6', fillOpacity: .06, weight: 1.5, dashArray: '6 6' }).addTo(map);
     var pin = L.divIcon({ className: '', html: '<div class="map-pin"><div class="ring"></div><div class="dot"></div></div>', iconSize: [46, 46], iconAnchor: [23, 23], popupAnchor: [0, -18] });
     L.marker([co.lat, co.lng], { icon: pin }).addTo(map).bindPopup('<b>' + esc(co.name) + '</b><br>' + esc(co.street) + '<br>' + esc(co.zip + ' ' + co.city));
@@ -29,7 +29,7 @@
   var m = $('#map-public');
   if (m && window.L) {
     var map2 = L.map(m, { scrollWheelZoom: false }).setView([co.lat, co.lng], 8);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; OpenStreetMap &copy; CARTO', subdomains: 'abcd' }).addTo(map2);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>', maxZoom: 19 }).addTo(map2);
     L.circle([co.lat, co.lng], { radius: co.serviceRadiusKm * 1000, color: '#1f6fd6', fillColor: '#1f6fd6', fillOpacity: .08, weight: 2 }).addTo(map2);
     L.marker([co.lat, co.lng]).addTo(map2).bindPopup('<b>' + esc(co.name) + '</b><br>' + esc(co.street) + '<br>' + esc(co.zip + ' ' + co.city));
   } else if (m) {
