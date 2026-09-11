@@ -1,0 +1,71 @@
+name: Deploy TorPro to IONOS webspace (SFTP)
+
+on:
+  workflow_dispatch:
+    inputs:
+      host:
+        description: "SFTP host (e.g. access-123456789.webspace-host.com)"
+        required: true
+        type: string
+      user:
+        description: "SFTP username"
+        required: true
+        type: string
+      password:
+        description: "SFTP password"
+        required: true
+        type: string
+      remote_dir:
+        description: "Target directory on the webspace"
+        required: true
+        default: "/torpro-zugangstechnik"
+        type: string
+      ref:
+        description: "Branch to deploy"
+        required: true
+        default: "claude/torpro-website-4inevh"
+        type: string
+
+concurrency:
+  group: ionos-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+      - name: Install lftp
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+      - name: Upload torpro/ via SFTP
+        env:
+          HOST: ${{ inputs.host }}
+          USER: ${{ inputs.user }}
+          PASS: ${{ inputs.password }}
+          RDIR: ${{ inputs.remote_dir }}
+        run: |
+          echo "::add-mask::$PASS"
+          cd torpro
+          # .htaccess für saubere URLs, Admin-Schutz-Header und Fehlerseite
+          cat > .htaccess <<'EOF'
+          DirectoryIndex index.html
+          ErrorDocument 404 /404.html
+          RewriteEngine On
+          RewriteCond %{HTTPS} off
+          RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+          RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+          RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]
+          <IfModule mod_headers.c>
+            Header set X-Content-Type-Options "nosniff"
+            Header set Referrer-Policy "strict-origin-when-cross-origin"
+            <FilesMatch "\.(jpg|jpeg|png|svg|css|js)$">
+              Header set Cache-Control "public, max-age=604800"
+            </FilesMatch>
+          </IfModule>
+          EOF
+          rm -f _redirects
+          lftp -u "$USER","$PASS" "sftp://$HOST" -e "set sftp:auto-confirm yes; set net:max-retries 3; mkdir -p $RDIR; mirror -R --delete --verbose=1 --exclude-glob .gitkeep . $RDIR; quit"
+          echo "Upload abgeschlossen nach $RDIR"
