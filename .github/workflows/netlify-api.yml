@@ -1,0 +1,42 @@
+name: Netlify API call
+
+on:
+  workflow_dispatch:
+    inputs:
+      proxy_path:
+        description: "Netlify MCP proxy path (temporary credential)"
+        required: true
+        type: string
+      method:
+        description: "HTTP method"
+        required: true
+        default: "GET"
+        type: string
+      api_path:
+        description: "API path, e.g. /api/v1/sites/<id>"
+        required: true
+        type: string
+      body:
+        description: "JSON body (optional)"
+        required: false
+        default: ""
+        type: string
+
+jobs:
+  call:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Call Netlify API through proxy
+        env:
+          NETLIFY_PROXY: ${{ inputs.proxy_path }}
+          METHOD: ${{ inputs.method }}
+          API_PATH: ${{ inputs.api_path }}
+          BODY: ${{ inputs.body }}
+        run: |
+          echo "::add-mask::$NETLIFY_PROXY"
+          if [ -n "$BODY" ]; then
+            curl -sS -w '\nHTTP %{http_code}\n' -X "$METHOD" -H "Content-Type: application/json" -d "$BODY" "$NETLIFY_PROXY$API_PATH"
+          else
+            curl -sS -w '\nHTTP %{http_code}\n' -X "$METHOD" "$NETLIFY_PROXY$API_PATH"
+          fi
