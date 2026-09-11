@@ -1,0 +1,47 @@
+name: Import images into branch
+
+on:
+  workflow_dispatch:
+    inputs:
+      urls:
+        description: "Space-separated list of image URLs to download"
+        required: true
+        type: string
+      target_dir:
+        description: "Directory inside the repo to store the images"
+        required: true
+        default: "torpro/assets/img/_import"
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - name: Download images
+        env:
+          URLS: ${{ inputs.urls }}
+          TARGET: ${{ inputs.target_dir }}
+        run: |
+          mkdir -p "$TARGET"
+          n=0
+          for u in $URLS; do
+            n=$((n+1))
+            ext="${u##*.}"; ext="${ext%%\?*}"
+            case "$ext" in jpg|jpeg|png|webp) ;; *) ext="jpg";; esac
+            f="$TARGET/$(printf 'img-%02d' "$n").$ext"
+            curl -fsSL --retry 3 -o "$f" "$u" && echo "ok $f" || echo "FAILED $u"
+          done
+          ls -la "$TARGET"
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet && echo "nothing to commit" || (git commit -m "Import images" && git push)
