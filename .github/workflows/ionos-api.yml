@@ -1,0 +1,36 @@
+name: IONOS API call
+
+on:
+  workflow_dispatch:
+    inputs:
+      api_key:
+        description: "IONOS API key (prefix.secret)"
+        required: true
+        type: string
+      calls:
+        description: "One call per line: METHOD PATH [JSON body]"
+        required: true
+        type: string
+
+jobs:
+  call:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Call IONOS API
+        env:
+          KEY: ${{ inputs.api_key }}
+          CALLS: ${{ inputs.calls }}
+        run: |
+          echo "::add-mask::$KEY"
+          while IFS= read -r line; do
+            [ -z "$line" ] && continue
+            m=$(echo "$line" | awk '{print $1}'); p=$(echo "$line" | awk '{print $2}'); b=$(echo "$line" | cut -d' ' -f3-)
+            echo "=================== $m $p"
+            if [ -n "$b" ] && [ "$b" != "$line" ] && [ "$b" != "$p" ]; then
+              curl -sS -w '\nHTTP %{http_code}\n' -X "$m" -H "X-API-Key: $KEY" -H "Accept: application/json" -H "Content-Type: application/json" -d "$b" "https://api.hosting.ionos.com$p" | head -c 6000
+            else
+              curl -sS -w '\nHTTP %{http_code}\n' -X "$m" -H "X-API-Key: $KEY" -H "Accept: application/json" "https://api.hosting.ionos.com$p" | head -c 6000
+            fi
+            echo
+          done <<< "$CALLS"
