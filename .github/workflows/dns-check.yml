@@ -19,11 +19,10 @@ jobs:
           D: ${{ inputs.domain }}
         run: |
           sudo apt-get install -y -qq whois >/dev/null 2>&1 || true
-          for r in 8.8.8.8 1.1.1.1; do
-            echo "== $r A";    dig +short A "$D" @$r || true
-            echo "== $r NS";   dig +short NS "$D" @$r || true
-          done
+          echo "== 8.8.8.8 A";    dig +short A "$D" @8.8.8.8 || true
           echo "== TLD delegation (a.nic.de)"; dig +norecurse NS "$D" @a.nic.de | sed -n '/AUTHORITY SECTION/,/^$/p' || true
-          echo "== Authoritative ns1105.ui-dns.com"; dig +short A "$D" @ns1105.ui-dns.com || true; dig +short CNAME "www.$D" @ns1105.ui-dns.com || true
+          for ns in ns1025.ui-dns.de ns1034.ui-dns.biz ns1098.ui-dns.org ns1105.ui-dns.com; do
+            echo "== $ns"; dig +norecurse +noall +answer +authority SOA "$D" @$ns || true; dig +short NS "$D" @$ns | sort | tr '\n' ' ' ; echo; dig +short A "$D" @$ns || true
+          done
           echo "== DENIC whois"; whois -h whois.denic.de -- "-T dn $D" 2>&1 | grep -v '^%' | grep -v '^$' | head -20 || true
           echo "== HTTP"; curl -sS -o /dev/null -w 'http -> %{http_code}\n' "http://$D/" || true
