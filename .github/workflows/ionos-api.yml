@@ -8,7 +8,7 @@ on:
         required: true
         type: string
       calls:
-        description: "One call per line: METHOD PATH [JSON body]"
+        description: "One call per line: METHOD PATH-or-URL [JSON body]"
         required: true
         type: string
 
@@ -26,11 +26,12 @@ jobs:
           while IFS= read -r line; do
             [ -z "$line" ] && continue
             m=$(echo "$line" | awk '{print $1}'); p=$(echo "$line" | awk '{print $2}'); b=$(echo "$line" | cut -d' ' -f3-)
-            echo "=================== $m $p"
+            case "$p" in http*) url="$p";; *) url="https://api.hosting.ionos.com$p";; esac
+            echo "=================== $m $url"
             if [ -n "$b" ] && [ "$b" != "$line" ] && [ "$b" != "$p" ]; then
-              curl -sS -w '\nHTTP %{http_code}\n' -X "$m" -H "X-API-Key: $KEY" -H "Accept: application/json" -H "Content-Type: application/json" -d "$b" "https://api.hosting.ionos.com$p" | head -c 6000
+              curl -sSL -w '\nHTTP %{http_code}\n' -X "$m" -H "X-API-Key: $KEY" -H "Accept: application/json" -H "Content-Type: application/json" -d "$b" "$url" | head -c 8000
             else
-              curl -sS -w '\nHTTP %{http_code}\n' -X "$m" -H "X-API-Key: $KEY" -H "Accept: application/json" "https://api.hosting.ionos.com$p" | head -c 6000
+              curl -sSL -w '\nHTTP %{http_code}\n' -X "$m" -H "X-API-Key: $KEY" -H "Accept: application/json" "$url" | grep -oE 'https?://[^"'"'"' <>]*(openapi|swagger|api-docs|\.json|\.yaml)[^"'"'"' <>]*|.{0,0}' | sort -u | head -40; echo "(body shown filtered for spec links)"; curl -sSL -X "$m" -H "X-API-Key: $KEY" -H "Accept: application/json" "$url" | head -c 3000
             fi
             echo
           done <<< "$CALLS"
