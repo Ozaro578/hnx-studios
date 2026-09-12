@@ -18,12 +18,12 @@ jobs:
         env:
           D: ${{ inputs.domain }}
         run: |
-          for r in 8.8.8.8 1.1.1.1 9.9.9.9; do
+          sudo apt-get install -y -qq whois >/dev/null 2>&1 || true
+          for r in 8.8.8.8 1.1.1.1; do
             echo "== $r A";    dig +short A "$D" @$r || true
-            echo "== $r www";  dig +short CNAME "www.$D" @$r || true
             echo "== $r NS";   dig +short NS "$D" @$r || true
           done
           echo "== TLD delegation (a.nic.de)"; dig +norecurse NS "$D" @a.nic.de | sed -n '/AUTHORITY SECTION/,/^$/p' || true
           echo "== Authoritative ns1105.ui-dns.com"; dig +short A "$D" @ns1105.ui-dns.com || true; dig +short CNAME "www.$D" @ns1105.ui-dns.com || true
-          echo "== HTTP"; curl -sS -o /dev/null -w 'http://%{url_effective} -> %{http_code} (%{redirect_url})\n' "http://$D/" || true
-          curl -sS -o /dev/null -w 'https -> %{http_code}\n' "https://$D/" || true
+          echo "== DENIC whois"; whois -h whois.denic.de -- "-T dn $D" 2>&1 | grep -v '^%' | grep -v '^$' | head -20 || true
+          echo "== HTTP"; curl -sS -o /dev/null -w 'http -> %{http_code}\n' "http://$D/" || true
