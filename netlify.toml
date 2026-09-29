@@ -1,0 +1,19 @@
+# Netlify-Konfiguration für hnx-studios
+# Veröffentlicht den Ordner "torpro" als Website-Root:
+#   https://<site>.netlify.app/          → TorPro Startseite
+#   https://<site>.netlify.app/admin/    → Mitarbeiterbereich
+[build]
+  publish = "torpro"
+  command = ""
+
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

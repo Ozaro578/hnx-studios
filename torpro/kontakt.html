@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kontakt – TorPro Zugangstechnik, Klingenberger Straße 100, Heilbronn</title>
+<meta name="description" content="Kontakt zu TorPro Zugangstechnik in Heilbronn: Telefon, E-Mail, Anfahrt und Öffnungszeiten. Anfrage für Garagentor, Antrieb, Wartung oder Reparatur.">
+<link rel="canonical" href="https://torpro-zugangstechnik.de/kontakt.html">
+<meta property="og:title" content="Kontakt – TorPro Zugangstechnik, Klingenberger Straße 100, Heilbronn">
+<meta property="og:description" content="Kontakt zu TorPro Zugangstechnik in Heilbronn: Telefon, E-Mail, Anfahrt und Öffnungszeiten. Anfrage für Garagentor, Antrieb, Wartung oder Reparatur.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://torpro-zugangstechnik.de/kontakt.html">
+<meta property="og:image" content="https://torpro-zugangstechnik.de/assets/img/referenzen/ref-01.jpg">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<link rel="stylesheet" href="assets/css/style.css">
+
+</head>
+<body>
+<div id="site-header"></div>
+<main>
+<section class="page-hero"><div class="container">
+  <div class="breadcrumb"><a href="index.html">Start</a> › Kontakt</div>
+  <span class="eyebrow">Kontakt</span>
+  <h1>Sprechen Sie mit uns.</h1>
+  <p class="lead">Rufen Sie an, schreiben Sie uns oder nutzen Sie das Formular – wir melden uns werktags innerhalb von 24 Stunden.</p>
+</div></section><section class="section"><div class="container contact-grid">
+  <div class="card contact-info">
+    <h3>TorPro Zugangstechnik</h3>
+    <dl>
+      <dt>Adresse</dt><dd>Klingenberger Straße 100<br>74080 Heilbronn</dd>
+      <dt>Telefon</dt><dd><a href="#" data-phone-link>Telefon</a></dd>
+      <dt>E-Mail</dt><dd><a href="#" data-mail-link>E-Mail</a></dd>
+    </dl>
+    <h3 style="font-size:1rem">Öffnungszeiten</h3>
+    <dl id="opening-hours"></dl>
+    <a class="btn btn-ghost btn-sm" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=Klingenberger+Stra%C3%9Fe+100%2C+74080+Heilbronn">Route planen ↗</a>
+  </div>
+  <div class="card">
+    <form id="contact-form" novalidate>
+      <div class="row">
+        <div class="field"><label for="cf-name">Name *</label><input id="cf-name" required autocomplete="name"></div>
+        <div class="field"><label for="cf-phone">Telefon</label><input id="cf-phone" type="tel" autocomplete="tel"></div>
+      </div>
+      <div class="field"><label for="cf-email">E-Mail *</label><input id="cf-email" type="email" required autocomplete="email"></div>
+      <div class="field"><label for="cf-topic">Anliegen</label><select id="cf-topic"><option>Neues Garagentor</option><option>Industrietor</option><option>Antrieb nachrüsten</option><option>Reparatur / Notdienst</option><option>Wartung / UVV-Prüfung</option><option>Haustür / Nebentür</option><option>Sonstiges</option></select></div>
+      <div class="field"><label for="cf-msg">Nachricht *</label><textarea id="cf-msg" required></textarea></div>
+      <input class="honeypot" tabindex="-1" autocomplete="off" id="cf-hp" name="website">
+      <label class="checkbox"><input type="checkbox" id="cf-privacy" required> <span>Ich stimme der Verarbeitung meiner Daten gemäß <a href="datenschutz.html" target="_blank">Datenschutzerklärung</a> zu. *</span></label>
+      <div id="contact-msg" style="margin-top:1rem"></div>
+      <button class="btn btn-primary" type="submit" style="margin-top:1rem">Nachricht senden</button>
+    </form>
+  </div>
+</div></section><section class="location" id="standort">
+  <div class="map-wrap">
+    <div id="map-standort" aria-label="Karte: Standort TorPro Zugangstechnik, Klingenberger Straße 100, 74080 Heilbronn"></div>
+    <div class="map-card">
+      <span class="eyebrow">Unser Standort</span>
+      <h2>TorPro Zugangstechnik<br>Heilbronn</h2>
+      <dl>
+        <dt>Adresse</dt><dd>Klingenberger Straße 100<br>74080 Heilbronn</dd>
+        <dt>Telefon</dt><dd><a href="#" data-phone-link>Telefon</a></dd>
+        <dt>E-Mail</dt><dd><a href="#" data-mail-link>E-Mail</a></dd>
+        <dt>Einsatzgebiet</dt><dd>Heilbronn, Neckarsulm, Ludwigsburg, Sinsheim, Mosbach, Schwäbisch Hall – rund 80 km</dd>
+      </dl>
+      <div class="btns">
+        <a class="btn btn-primary btn-sm" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=Klingenberger+Stra%C3%9Fe+100%2C+74080+Heilbronn">Route planen ↗</a>
+        <a class="btn btn-outline btn-sm" href="kontakt.html">Kontakt aufnehmen</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<div id="site-footer"></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/layout.js"></script>
+<script src="assets/js/logo.js"></script>
+<script src="assets/js/store.js"></script>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>
