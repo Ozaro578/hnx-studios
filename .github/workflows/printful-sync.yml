@@ -1,0 +1,54 @@
+name: Printful – TorPro Teamkleidung
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "list | plan | create | mockups | delete"
+        required: true
+        default: plan
+        type: choice
+        options: [list, plan, create, mockups, delete]
+      only:
+        description: "Nur bestimmte Produkte (Keys, kommagetrennt, z. B. polo,cap) – leer = alle"
+        required: false
+        type: string
+      api_key:
+        description: "Printful-Token (nur nötig, wenn kein Repository-Secret PRINTFUL_API_KEY gesetzt ist)"
+        required: false
+        type: string
+      store_id:
+        description: "Printful Store-ID (nur bei mehreren Stores)"
+        required: false
+        type: string
+      ref:
+        description: "Branch mit scripts/ (Standard: claude/torpro-website-4inevh)"
+        required: false
+        default: claude/torpro-website-4inevh
+        type: string
+
+jobs:
+  printful:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run
+        env:
+          PRINTFUL_API_KEY: ${{ secrets.PRINTFUL_API_KEY || inputs.api_key }}
+          PRINTFUL_STORE_ID: ${{ inputs.store_id }}
+          ONLY: ${{ inputs.only }}
+        run: |
+          echo "::add-mask::$PRINTFUL_API_KEY"
+          node scripts/printful-sync.mjs "${{ inputs.action }}"
+      - name: Mockups sichern
+        if: inputs.action == 'mockups'
+        uses: actions/upload-artifact@v4
+        with:
+          name: torpro-mockups
+          path: mockups.json

@@ -1,0 +1,113 @@
+{
+  "_comment": "TorPro Teamkleidung – Produktplan für Printful. Dateien liegen unter https://torpro-zugangstechnik.de/print/. Farben/Größen müssen im Printful-Katalog existieren (scripts/printful-sync.mjs prüft das).",
+  "baseUrl": "https://torpro-zugangstechnik.de/print/",
+  "sizes": ["S", "M", "L", "XL", "2XL", "3XL"],
+  "threads": {
+    "dark": ["#FFFFFF", "#E25C27"],
+    "light": ["#005397", "#E25C27"],
+    "capDark": ["#FFFFFF", "#E25C27", "#96A1A8"],
+    "capLight": ["#005397", "#E25C27", "#000000"]
+  },
+  "products": [
+    {
+      "key": "polo",
+      "name": "TorPro Polo · Stick",
+      "catalogId": 810,
+      "technique": "EMBROIDERY",
+      "retail": "34.00",
+      "colors": { "Navy": "dark", "Black": "dark", "Grey Melange": "light" },
+      "files": {
+        "dark":  [{ "type": "embroidery_chest_left", "file": "torpro-emb-dark.png",  "threadOption": "thread_colors_chest_left", "threads": "dark" }],
+        "light": [{ "type": "embroidery_chest_left", "file": "torpro-emb-light.png", "threadOption": "thread_colors_chest_left", "threads": "light" }]
+      }
+    },
+    {
+      "key": "tshirt",
+      "name": "TorPro T-Shirt · Brustlogo + Rückendruck",
+      "catalogId": 438,
+      "technique": "DTG",
+      "retail": "24.00",
+      "colors": { "Navy": "dark", "Black": "dark", "Sport Grey": "light", "White": "light" },
+      "files": {
+        "dark":  [{ "type": "default", "file": "torpro-logo-dark.png",  "position": "chestLeft" }, { "type": "back", "file": "torpro-back-dark.png" }],
+        "light": [{ "type": "default", "file": "torpro-logo-light.png", "position": "chestLeft" }, { "type": "back", "file": "torpro-back-light.png" }]
+      }
+    },
+    {
+      "key": "longsleeve",
+      "name": "TorPro Longsleeve · Brustlogo + Rückendruck",
+      "catalogId": 57,
+      "technique": "DTG",
+      "retail": "29.00",
+      "colors": { "Navy": "dark", "Black": "dark" },
+      "files": {
+        "dark": [{ "type": "default", "file": "torpro-logo-dark.png", "position": "chestLeft" }, { "type": "back", "file": "torpro-back-dark.png" }]
+      }
+    },
+    {
+      "key": "sweatshirt",
+      "name": "TorPro Sweatshirt · Brustlogo + Rückendruck",
+      "catalogId": 145,
+      "technique": "DTG",
+      "retail": "39.00",
+      "colors": { "Navy": "dark", "Black": "dark", "Sport Grey": "light" },
+      "files": {
+        "dark":  [{ "type": "default", "file": "torpro-logo-dark.png",  "position": "chestLeft" }, { "type": "back", "file": "torpro-back-dark.png" }],
+        "light": [{ "type": "default", "file": "torpro-logo-light.png", "position": "chestLeft" }, { "type": "back", "file": "torpro-back-light.png" }]
+      }
+    },
+    {
+      "key": "hoodie",
+      "name": "TorPro Hoodie · Brustlogo + Rückendruck",
+      "catalogId": 146,
+      "technique": "DTG",
+      "retail": "45.00",
+      "colors": { "Navy": "dark", "Black": "dark", "Sport Grey": "light" },
+      "files": {
+        "dark":  [{ "type": "default", "file": "torpro-logo-dark.png",  "position": "chestLeft" }, { "type": "back", "file": "torpro-back-dark.png" }],
+        "light": [{ "type": "default", "file": "torpro-logo-light.png", "position": "chestLeft" }, { "type": "back", "file": "torpro-back-light.png" }]
+      }
+    },
+    {
+      "key": "ziphoodie",
+      "name": "TorPro Zip-Hoodie · Stick",
+      "catalogId": 692,
+      "technique": "EMBROIDERY",
+      "retail": "49.00",
+      "colors": { "Navy": "dark", "Black": "dark" },
+      "files": {
+        "dark": [{ "type": "embroidery_chest_left", "file": "torpro-emb-dark.png", "threadOption": "thread_colors_chest_left", "threads": "dark" }]
+      }
+    },
+    {
+      "key": "cap",
+      "name": "TorPro Cap · Stick",
+      "catalogId": 206,
+      "technique": "EMBROIDERY",
+      "retail": "24.00",
+      "sizes": ["One size"],
+      "colors": { "Navy": "dark", "Black": "dark", "Dark Grey": "dark" },
+      "files": {
+        "dark": [{ "type": "default", "file": "torpro-emb-cap-dark.png", "threadOption": "thread_colors", "threads": "capDark" }]
+      },
+      "options": [{ "id": "embroidery_type", "value": "flat" }]
+    },
+    {
+      "key": "beanie",
+      "name": "TorPro Beanie · Stick",
+      "catalogId": 266,
+      "technique": "EMBROIDERY",
+      "retail": "22.00",
+      "sizes": ["One size"],
+      "colors": { "Navy": "dark", "Black": "dark", "Dark Grey": "dark" },
+      "files": {
+        "dark": [{ "type": "default", "file": "torpro-emb-dark.png", "threadOption": "thread_colors", "threads": "dark" }]
+      },
+      "options": [{ "id": "embroidery_type", "value": "flat" }]
+    }
+  ],
+  "positions": {
+    "_comment": "Druckbereich Front 12x16 Zoll = 3600x4800 px @300dpi. chestLeft = kleines Logo auf der linken Brust (Trägersicht = rechts im Bild).",
+    "chestLeft": { "area_width": 3600, "area_height": 4800, "width": 1150, "height": 316, "top": 330, "left": 2050, "limit_to_print_area": true }
+  }
+}
